@@ -91,6 +91,7 @@
 .news-list > div {
     display: flex;
     gap: 1rem;
+    align-items: center;
 }
 .news-menu {
     position: sticky;
@@ -112,4 +113,19 @@
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+.news-container.detail .news-list {
+    cursor:auto;
+}
+.news-container.detail .news-list:hover {
+    color: var(--color-main);
+}
+
+.news-container.detail img {
+    height: 100px;
+}
+
+.news-container.detail .coin-label > div p {
+    background: var(--scroll-thumb-color);
 }

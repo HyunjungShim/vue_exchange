@@ -81,6 +81,10 @@ label {
     justify-content: center;
 }
 
+.align-center {
+    align-items: center;
+}
+
 .wrapper {
     width: 80vw;
     margin: auto;
