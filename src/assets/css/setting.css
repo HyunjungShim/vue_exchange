@@ -1,0 +1,133 @@
+:root {
+    --color-bg:rgb(24, 26, 32);
+    --color-main:#EAECEF;
+    --color-gray:#848E9C;
+    --color-dark:#5E6673;
+    --color-green:#0ECB81;
+    --color-red:#F6465D;
+    --color-active:#ffe818;
+    --color-hover:#1E2026;
+    --color-text:#b7bdc6;
+    --scroll-width:0.5rem;
+    --scroll-thumb-color:#2f3542;
+    --scroll-track-color:#000733;
+    --select-hover-color:#2B3139;
+    --select-color:#848E9C;
+}
+
+html,body {
+    font-size: 10px;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-main)
+}
+
+img {
+    cursor: pointer;
+}
+p {
+    font-size: 1.6rem;
+}
+a {
+    text-decoration: none;
+    color: var(--color-gray);
+}
+a:visited {
+    color: var(--color-gray);
+}
+a:hover {
+    color: var(--color-main);
+}
+input[type='radio'] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+}
+label {
+    display: block;
+    width: 100%;
+}
+.color-red {
+    color: var(--color-red)
+}
+
+.color-green {
+    color: var(--color-green)
+}
+
+.color-active {
+    color:var(--color-active)
+}
+.color-text {
+    color: var(--color-text);
+}
+.grid-between {
+    display: grid;
+    align-items: center;
+    justify-content: space-between;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper {
+    width: 80vw;
+    margin: auto;
+    margin-top: 5rem;
+}
+
+.multiselect {
+    color: var(--select-color);
+    font-weight: bold;
+}
+
+.multiselect__tags {
+    min-height: 30px;
+    display: block;
+    padding: 8px 30px 0 8px;
+    border-radius: 5px;
+    border: 1px solid var(--color-dark);
+    background: transparent;
+    font-size: 14px;
+}
+
+.multiselect__select {
+    height: 38px;
+}
+
+.multiselect__input, .multiselect__single {
+    background: transparent;
+}
+
+.multiselect__option--selected {
+    background: var(--color-dark);
+}
+
+.multiselect__content-wrapper {
+    background: var(--color-bg);
+    border: 1px solid var(--color-dark);
+    border-top: none;
+}
+
+.multiselect__option--selected.multiselect__option--highlight {
+    background: var(--select-hover-color);
+}
+
+.multiselect__option--highlight,.multiselect__option--highlight::after {
+    background: var(--select-hover-color);
+}
+
+.multiselect__option--selected,.multiselect__option--selected.multiselect__option--highlight,.multiselect__option--selected.multiselect__option--highlight::after {
+    background: var(--color-dark);
+}
