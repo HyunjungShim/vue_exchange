@@ -1,8 +1,10 @@
 <template>
-    <multiselect v-model="selectedSymbol" :options="symbolOptions" :searchable="true" :close-on-select="true" :show-labels="false"
-    placeholder="Search Symbol"></multiselect>
-    <multiselect v-model="selectedInterval" :options="intervalOptions" :searchable="false" :close-on-select="true" :show-labels="false"
-    placeholder="Search Symbol"></multiselect>
+    <div class="select-wrapper">
+        <multiselect v-model="selectedSymbol" :options="symbolOptions" :searchable="true" :close-on-select="true" :show-labels="false"
+        placeholder="Search Symbol"></multiselect>
+        <multiselect v-model="selectedInterval" :options="intervalOptions" :searchable="false" :close-on-select="true" :show-labels="false"
+        placeholder="Search Symbol"></multiselect>
+    </div>
     <div class="lw-chart" ref="chartContainer" style="position:relative"></div>
 
 </template>
@@ -13,14 +15,14 @@ import { createChart } from 'lightweight-charts';
 import axios from 'axios';
 import Multiselect from 'vue-multiselect';
 import {reconnectWebSocket,candleSocket,socket,disconnectWebSocket, createWebSocket} from "@/utils/streaming.js";
-import { useRoute } from 'vue-router';
-const route = useRoute();
+import { useStore } from 'vuex';
+const store = useStore();
 
 let chart;
 const chartContainer = ref();
 let localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let symbolOptions = ref([]);
-const selectedSymbol = ref(route.query.symbol);
+const selectedSymbol = ref(store.state.exchangeInfo.selectedSymbol);
 const intervalOptions = ref(['1m','3m','5m','15m','30m','1h','2h','4h','6h','8h','12h','1d','3d','1w','1M'])
 const selectedInterval = ref('1h')
 let initLoad = ref(false);
@@ -45,7 +47,7 @@ let chartOptions = ref({
     rightPriceScale: {
         visible: true,
         borderColor: '#505050',
-        ticksVisible:true
+        ticksVisible:true,
     },
     layout: {
         background: { color: '#1D1D2B' },
@@ -118,6 +120,11 @@ onMounted(() => {
             top: 0.1,
             bottom: 0.3,
         },
+        priceFormat:{
+            type:'price',
+            precision: 5,
+            minMove: 0.00001
+        }
     });
 
     volumeSeries.priceScale().applyOptions({
@@ -132,6 +139,7 @@ onMounted(() => {
     watch(selectedSymbol, (newValue,oldValue) => {
         console.log('newValue,oldValue',newValue,oldValue);
         getCandleData(candleStickSeries, volumeSeries);
+        store.commit(`exchangeInfo/setSelectedSymbol`,{symbol:selectedSymbol.value,interval:selectedInterval.value})
         if(socket){
             console.log('selectedSymbol',selectedSymbol.value);
             reconnectWebSocket(selectedSymbol.value,selectedInterval.value,oldValue)
@@ -140,6 +148,7 @@ onMounted(() => {
     watch(selectedInterval, (newValue,oldValue) => {
         console.log('newValue,oldValue',newValue,oldValue);
         getCandleData(candleStickSeries, volumeSeries);
+        store.commit(`exchangeInfo/setSelectedSymbol`,{symbol:selectedSymbol.value,interval:selectedInterval.value})
         if(socket){
             console.log('selectedSymbol',selectedSymbol.value);
             reconnectWebSocket(selectedSymbol.value,selectedInterval.value)

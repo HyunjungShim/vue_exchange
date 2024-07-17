@@ -1,0 +1,32 @@
+.widget-wrapper {
+    margin: 3rem 0;
+}
+
+.symbol-info-wrapper {
+    margin-top: 0;
+}
+
+.symbol-profile-wrapper {
+    height: fit-content;
+    max-height: 300px;
+    margin: 3rem 0 0;
+}
+
+.technical-analysis-wrapper,.timeline-wrapper {
+    width: 50%;
+    height: 450px;
+    float:left
+}
+
+.technical-analysis-wrapper {
+    /* width: 60%; */
+}
+.timeline-wrapper {
+    /* width: 40%; */
+}
+
+.select-wrapper {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}

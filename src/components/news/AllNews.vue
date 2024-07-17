@@ -1,15 +1,19 @@
 <template>
     <div class="news-wrapper">
         <NewsMenu />
-        <div class="news-container all" ref="scrollCheck">
+        <div class="news-container all" ref="scrollCheck" v-if="displayNews.length > 0">
             <div class="news-list" v-for="(news,i) in displayNews.slice(0,visibleIdx)" :key="i" @click="goDetailView(news.id)">
                 <h1>{{ news.title }}</h1>
                 <h2 class="color-text news-body">{{ news.body }}</h2>
                 <div class="color-text">
                     <p>By {{ news.source_info.name }}</p>
+                    <p>{{ dateDiff(news.published_on) }}</p>
                     <p>{{ displayDate(news.published_on * 1000) }}</p>
                 </div>
             </div>
+        </div>
+        <div class="news-container all" ref="scrollCheck" v-else-if="displayNews.length <= 0">
+            <p>There is no news about BNB.</p>
         </div>
     </div>
 </template>
@@ -18,7 +22,7 @@
 import { useStore } from 'vuex';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter,useRoute } from 'vue-router';
-import {displayDate} from '@/utils/convertTime'
+import {dateDiff,displayDate} from '@/utils/convertTime'
 import NewsMenu from '@/components/news/NewsMenu.vue'
 const store = useStore();
 const router = useRouter();

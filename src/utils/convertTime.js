@@ -16,7 +16,14 @@ function dateFormatFunc(date){
     + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds())
 }
 
+function dateDiff(before_date){
+    before_date = Math.floor(new Date(before_date).getTime());
+    let now_date = Math.floor(Date.now());
+    return ((now_date-before_date) / (60));
+}
+
 export {
     dateFormatFunc,
-    displayDate
+    displayDate,
+    dateDiff
 }

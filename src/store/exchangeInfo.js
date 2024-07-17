@@ -4,8 +4,10 @@ export default {
     namespaced:true,
     state(){
         return{
-            symbolList:null,
-            marketList:null,
+            symbolList:[],
+            marketList:[],
+            selectedSymbol:'BTCUSDT',
+            selectedInterval:'1h',
         }
     },
     mutations:{
@@ -30,7 +32,16 @@ export default {
                     }
                 });
             })
-        }
+        },
+        setSelectedSymbol(state, payload) {
+            console.log('symbol',payload.symbol,payload.interval);
+            if(payload.symbol){
+                state.selectedSymbol = payload.symbol;
+            }
+            if(payload.interval){
+                state.selectedInterval = payload.interval;
+            }
+        },
     },
     actions:{
         async getExchangeInfo(context){
@@ -49,7 +60,7 @@ export default {
         async getMarketInfo({dispatch,commit}){
             try {
                 let symbolList = await dispatch('getExchangeInfo');
-                // console.log('symbolList.length',symbolList.length);
+                console.log('symbolList.length',symbolList.length);
                 // let sliceSymbolList = symbolList.slice(0,100)
                 const symbolsQueryParam = JSON.stringify(symbolList);
                 let res24 = await axios.get(`${baseUrl}/ticker/24hr?symbols=${decodeURI(symbolsQueryParam)}`)

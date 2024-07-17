@@ -35,7 +35,7 @@
       </div>
         <p>Chart</p>
     </div>
-    <div class="market-content" ref="scrollcheck">
+    <div class="market-content" ref="scrollcheck" >
       <div class="grid-between" v-for="(market,i) in filteredMarket.slice(0,visibleIdx)" :key="i">
         <p>{{ market.symbol }}</p>
         <p>{{ formatPrice(market.lastPrice) }}</p>
@@ -64,8 +64,17 @@ const changeOptions = ref(['1h','4h','24h']);
 const selectedChange = ref('24h');
 const store = useStore();
 const router = useRouter()
-const marketList = computed(() => store.state.exchangeInfo.marketList);
-
+const marketList = computed(() => store.state.exchangeInfo.marketList || []);
+console.log(marketList.value);
+const visibleIdx = ref(30);
+const scrollcheck =ref();
+onMounted(()=> {
+  store.dispatch('exchangeInfo/getMarketInfo')
+  console.log(scrollcheck.value);
+  if (scrollcheck.value) {
+    scrollcheck.value.addEventListener('scroll', handleScroll);
+  }
+})
 const sortType = ref('default')
 let clickCounts = ref({
   symbol: 0,
@@ -74,7 +83,7 @@ let clickCounts = ref({
   quoteVolume: 0,
 });
 
-const defaultImage = ref(require("../assets/images/sort-icon.png"));
+const defaultImage = ref(require("@/assets/images/sort-icon.png"));
 
 const sortImages = ref({
   symbol:defaultImage.value,
@@ -88,43 +97,21 @@ const filteredMarket = computed(()=> {
   let orderType = sortType.value.split('-')[1];
   let lowerWord = searchWord.value.toLowerCase();
   let searchedMarket = [...marketList.value].filter((el)=> el.symbol.toLowerCase().includes(lowerWord))
-  if(sortName == 'symbol'){
-    if(orderType == 'asc'){
-      return searchedMarket.sort((a,b)=> {
-        return a.symbol > b.symbol ? 1 : -1
-      })
-    }else if(orderType == 'desc'){
-      return searchedMarket.sort((a,b)=> {
-          return a.symbol < b.symbol ? 1 : -1
-      })
-    }
-  }else if(sortName == 'default'){
-    return searchedMarket
-  }else{
-    if(orderType == 'asc'){
-      return searchedMarket.sort((a,b)=> {
-        return a[sortName] - b[sortName]
-      })
-    }else if(orderType == 'desc'){
-      return searchedMarket.sort((a,b)=> {
-          return  b[sortName] - a[sortName]
-      })
-    }
+  console.log('searchMarket',searchedMarket);
+  if (sortName === 'symbol') {
+    return searchedMarket.sort((a, b) => {
+      return orderType === 'asc' ? (a.symbol > b.symbol ? 1 : -1) : (a.symbol < b.symbol ? 1 : -1);
+    });
+  } else if (sortName === 'default') {
+    return searchedMarket;
+  } else {
+    return searchedMarket.sort((a, b) => {
+      return orderType === 'asc' ? a[sortName] - b[sortName] : b[sortName] - a[sortName];
+    });
   }
-  return searchedMarket;
 })
-
-const visibleIdx = ref(30);
-const scrollcheck =ref();
-onMounted(()=> {
-  store.dispatch('exchangeInfo/getMarketInfo')
-  console.log(scrollcheck.value);
-  scrollcheck.value.addEventListener('scroll',handleScroll)
-
-
-  watch(selectedChange,()=> {
-    console.log(selectedChange.value);
-  })
+watch(selectedChange,()=> {
+  console.log(selectedChange.value);
 })
 onUnmounted(()=> {
   // disconnectWebSocket()
@@ -153,7 +140,7 @@ function handleScroll() {
 
 function toggleSort(name) {
   clickCounts.value[name]++
-  console.log('clickCount', clickCounts.value[name]);
+  // console.log('clickCount', clickCounts.value[name]);
   for (const key in sortImages.value) {
     if (key !== name) {
       sortImages.value[key] = defaultImage.value;
@@ -162,22 +149,19 @@ function toggleSort(name) {
   }
   if( clickCounts.value[name] % 3 == 0 ){
     sortType.value = 'default'
-    sortImages.value[name] = require("../assets/images/sort-icon.png");
+    sortImages.value[name] = require("@/assets/images/sort-icon.png");
   }else if( clickCounts.value[name] % 3 == 1){
-    sortImages.value[name] = require("../assets/images/sort-up-icon.png");
+    sortImages.value[name] = require("@/assets/images/sort-up-icon.png");
     sortType.value = name+'-asc'
   }else if( clickCounts.value[name] % 3 == 2){
-    sortImages.value[name] = require("../assets/images/sort-down-icon.png");
+    sortImages.value[name] = require("@/assets/images/sort-down-icon.png");
     sortType.value = name+'-desc'
   }
 }
 
 function pushWithQuery(symbol){
-  router.push(
-    {
-      path: '/chart',
-      query: { symbol: symbol }
-    });
+  store.commit(`exchangeInfo/setSelectedSymbol`,{symbol:symbol})
+  router.push('/chart');
 }
 
 onUnmounted(()=>{
