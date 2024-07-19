@@ -20,7 +20,7 @@ export function createSymbolWidget(src,symbol,interval){
     "symbol": `BINANCE:${symbol}`,
     "showIntervalTabs": true,
     "locale": userLang,
-    "colorTheme": "dark"
+    "colorTheme": "dark",
     });
     widgetPlaceholder.appendChild(script);
 }

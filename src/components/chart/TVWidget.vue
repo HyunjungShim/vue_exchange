@@ -11,6 +11,7 @@
 import {computed,  onMounted,  watch,defineProps} from 'vue';
 import {useStore} from 'vuex';
 import { createSymbolWidget } from '@/utils/createWidget.js'
+import '@/assets/css/chart.css';
 const store = useStore();
 let symbol = computed(()=> {
     return store.state.exchangeInfo.selectedSymbol

@@ -27,3 +27,9 @@
 .header-menu p{
     cursor: pointer;
 }
+
+@media screen and (max-width:576px){
+    .header-container {
+        width: 100%;
+    }
+}

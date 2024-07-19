@@ -176,6 +176,13 @@
         display: grid;
         grid-template-columns: 1fr;
     }
+    .market-title h1{
+        margin: 0;
+    }
+    .market-title h2 {
+        margin: 0;
+        margin-bottom: 2rem;
+    }
     .market-title div{
         display: none;
     }
@@ -191,5 +198,8 @@
     }
     .market-container .market-top p {
         margin: 0.3rem 0;
+    }
+    .market-content {
+        height: 420px;
     }
 }

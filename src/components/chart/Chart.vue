@@ -308,8 +308,4 @@ function formatPrice(price){
 </script>
 
 <style scoped>
-    .lw-chart {
-        height: 500px;
-        width: 100%;
-    }
 </style>

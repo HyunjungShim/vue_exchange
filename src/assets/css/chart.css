@@ -1,9 +1,14 @@
+.lw-chart {
+    height: 500px;
+    width: 100%;
+}
 .widget-wrapper {
     margin: 3rem 0;
 }
 
 .symbol-info-wrapper {
     margin-top: 0;
+    margin-bottom: -10px;
 }
 
 .symbol-profile-wrapper {
@@ -29,4 +34,17 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 576px) {
+    .technical-analysis-wrapper, .timeline-wrapper {
+        width: 100%;
+    }
+    .symbol-info-wrapper {
+        margin-top: 0;
+        margin: -20px 0;
+    }
+    .lw-chart {
+        height: 420px;
+    }
 }

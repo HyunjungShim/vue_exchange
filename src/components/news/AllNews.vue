@@ -3,11 +3,11 @@
         <NewsMenu />
         <div class="news-container all" ref="scrollCheck" v-if="displayNews.length > 0">
             <div class="news-list" v-for="(news,i) in displayNews.slice(0,visibleIdx)" :key="i" @click="goDetailView(news.id)">
+                <p>{{ dateDiff(news.published_on) }}m</p>
                 <h1>{{ news.title }}</h1>
                 <h2 class="color-text news-body">{{ news.body }}</h2>
                 <div class="color-text">
                     <p>By {{ news.source_info.name }}</p>
-                    <p>{{ dateDiff(news.published_on) }}</p>
                     <p>{{ displayDate(news.published_on * 1000) }}</p>
                 </div>
             </div>
@@ -87,3 +87,5 @@ onUnmounted(()=> {
     window.removeEventListener('scroll',handleScroll)
 })
 </script>
+<style lang="css">
+</style>

@@ -17,9 +17,9 @@ function dateFormatFunc(date){
 }
 
 function dateDiff(before_date){
-    before_date = Math.floor(new Date(before_date).getTime());
-    let now_date = Math.floor(Date.now());
-    return ((now_date-before_date) / (60));
+    before_date = (before_date*1000);
+    let now_date = (new Date().getTime());
+    return Math.round((now_date-before_date)/(1000*60).toFixed(0));
 }
 
 export {

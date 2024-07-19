@@ -22,13 +22,11 @@
     width: 100%;
     border-radius: 5px;
 }
-/* .news-container.major {
-    grid-template-rows: repeat(5,1fr);
-} */
 
 .coin-label > div {
     display: flex;
     gap:1rem;
+    flex-wrap: wrap;
 }
 .coin-label > div p {
     margin: 0;
@@ -78,8 +76,15 @@
 }
 .news-container.all::-webkit-scrollbar {
     width:var(--scroll-width) ;
-    /* display: none; */
 }
+
+.news-container.all .news-list h1 {
+    margin: 0;
+}
+.news-container.all .news-list {
+    margin-bottom: 2rem;
+}
+
 .news-list p {
     margin: 0;
 }
@@ -88,6 +93,7 @@
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex-wrap: wrap;
 }
 .news-menu {
     position: sticky;
@@ -147,9 +153,90 @@
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
 }
-
+@media screen and (max-width : 1440px){
+    h1.news-title{
+        font-size: 2rem;
+    }
+}
 @media screen and (max-width : 1024px){
-    .news-title, .news-body {
+    .news-title, .news-body, h1.news-title {
         font-size: 1.6rem;
+    }
+    .news-container.main .news-list > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap:0.5rem;
+    }
+    .news-container .news-list > div p {
+        font-size: 1.4rem;
+    }
+    .news-container.main a {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width : 900px){
+    .news-wrapper {
+        flex-direction: column;
+    }
+    .news-container.main {
+        width: 100%;
+    }
+    .news-list {
+        margin: 1rem 0;
+    }
+}
+@media screen and (max-width : 768px){
+    .news-menu h1 {
+        width: 100%;
+        margin: 0;
+    }
+    .news-menu p {
+        margin: 0;
+    }
+    .news-menu {
+        height: fit-content;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+    }
+}
+@media screen and (max-width : 576px){
+    .news-list-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .coin-label > div p {
+        font-size: 1.4rem;
+    }
+    .news-menu  {
+        justify-content: flex-start;
+        position: inherit;
+    }
+    .news-menu p , .news-menu h1 {
+        margin: 0;
+    }
+    .news-container.all .news-list h1 {
+        font-size: 1.8rem;
+    }
+    .news-container.all {
+        height:calc(100vh - 25rem) ;
+    }
+    .news-container.detail img {
+        width: 20px;
+    }
+    .news-container.detail .news-title {
+        font-size: 2rem;
+    }
+    .news-container.detail .news-detail-content {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        line-height: 2.5rem;
+    }
+    .news-container.detail .news-info img {
+        width: 80px;
     }
 }
