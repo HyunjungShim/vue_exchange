@@ -34,11 +34,8 @@
 .market-title {
     align-items: baseline;
 }
-.market-title h1 {
-    font-size: 2.4rem;
-}
 
-.market-title h1  span, .market-title h2 {
+.market-title span {
     font-size: 1.8rem;
 }
 
@@ -139,4 +136,60 @@
     display: block;
     min-height: 22px;
     background-size: contain;
+}
+
+@media screen and (max-width : 1024px){
+    .market-title {
+        display: flex;
+        justify-content: flex-start;
+    }
+    .market-container p {
+        font-size: 1.4rem;
+    }
+    .market-wrapper .search-container {
+        margin-left: auto;
+    }
+    .market-wrapper .symbol-search {
+        margin-right:inherit;
+    }
+}
+
+@media screen and (max-width : 768px){
+    .market-title {
+        display: grid;
+        grid-template-columns: 1fr 3fr 0.5fr 0.5fr 0.5fr;
+        margin-bottom: 2rem;
+    }
+    .market-container .market-top div:first-child {
+        justify-content: center;
+    }
+    .market-content .grid-between p:first-child {
+        text-align: center;
+    }
+    .market-container div.grid-between {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen and (max-width : 576px){
+    .market-title {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .market-title div{
+        display: none;
+    }
+    .market-title div.search-container {
+        display: block;
+        margin-left: inherit;
+    }
+    .market-container div.grid-between {
+
+    }
+    .market-container .market-top div:first-child.change {
+        flex-direction: column;
+    }
+    .market-container .market-top p {
+        margin: 0.3rem 0;
+    }
 }

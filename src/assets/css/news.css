@@ -15,9 +15,6 @@
     padding: 2rem;
     font-weight: bold;
 }
-.news-container h1 {
-    font-size: 2.4rem;
-}
 .news-container.main {
     width: 70%;
 }
@@ -82,9 +79,6 @@
 .news-container.all::-webkit-scrollbar {
     width:var(--scroll-width) ;
     /* display: none; */
-}
-.news-list h1 {
-    font-size: 2rem;
 }
 .news-list p {
     margin: 0;
@@ -152,4 +146,10 @@
 .news-container.detail .news-title {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
+}
+
+@media screen and (max-width : 1024px){
+    .news-title, .news-body {
+        font-size: 1.6rem;
+    }
 }

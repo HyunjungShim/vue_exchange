@@ -22,7 +22,7 @@
         <p class="sort flex-center symbol-sort" @click="toggleSort('lastPrice')"><img :src="sortImages.lastPrice"/></p>
       </div>
       <div class="flex-center">
-        <div class="flex-center">
+        <div class="flex-center change">
           <Multiselect v-model="selectedChange" :options="changeOptions" :close-on-select="true" :show-labels="false" :searchable="false"></Multiselect>
           <p>Change</p>
         </div>
@@ -42,8 +42,8 @@
         <p class="color-green" v-if="market.priceChangePercent > 0">+{{ formatPercent(market.priceChangePercent) }}%</p>
         <p class="color-red" v-else-if="market.priceChangePercent < 0">{{ formatPercent(market.priceChangePercent) }}%</p>
         <p v-else-if="market.priceChangePercent == 0">{{ formatPercent(market.priceChangePercent) }}%</p>
-        <p>{{ formatPrice(market.highPrice) }} /{{ formatPrice(market.lowPrice) }}</p>
-        <p>{{ formatPrice(market.quoteVolume) }}</p>
+        <p>{{ formatPrice(market.highPrice) }} / {{ formatPrice(market.lowPrice) }}</p>
+        <p>{{ formatVolume(market.quoteVolume) }}</p>
         <p class="chart-icon-box" @click="pushWithQuery(market.symbol)"
         >
         </p>
@@ -118,6 +118,9 @@ onUnmounted(()=> {
 })
 function formatPrice(price){
   return Number(price).toLocaleString('en',{maximumSignificantDigits:20})
+}
+function formatVolume(volume){
+  return Intl.NumberFormat('en', {notation: "compact",maximumFractionDigits: 2}).format(volume) //output - "234K"
 }
 
 function formatPercent(percent){

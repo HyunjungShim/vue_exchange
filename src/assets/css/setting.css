@@ -29,6 +29,12 @@ body {
 img {
     cursor: pointer;
 }
+h1 {
+    font-size: 2.4rem;
+}
+h2 {
+    font-size: 1.8rem;
+}
 p {
     font-size: 1.6rem;
 }
@@ -155,4 +161,16 @@ button {
 
 .multiselect__option--selected,.multiselect__option--selected.multiselect__option--highlight,.multiselect__option--selected.multiselect__option--highlight::after {
     background: var(--color-dark);
+}
+
+@media screen and (max-width : 1024px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.6rem;
+    }
+    .multiselect,.multiselect__single {
+      font-size: 1.4rem;
+    }
 }
