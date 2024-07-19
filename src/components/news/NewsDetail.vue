@@ -35,9 +35,9 @@ import NewsMenu from '@/components/news/NewsMenu.vue'
 const route = useRoute();
 const postId = ref(route.params.id);
 const store = useStore();
-console.log(postId.value);
+// console.log(postId.value);
 const post = computed(()=> {
-    console.log('store.state.newsList.LatestNewsMain',store.state.newsList.allLatestNews);
+    // console.log('store.state.newsList.LatestNewsMain',store.state.newsList.allLatestNews);
     return store.state.newsList.allLatestNews.find((el)=> el.id == postId.value)
 })
 const tags = computed(()=> {

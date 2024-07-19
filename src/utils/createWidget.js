@@ -1,5 +1,5 @@
 export function createSymbolWidget(src,symbol,interval){
-    console.log('container',src);
+    // console.log('container',src);
     const widgetPlaceholder = document.querySelector(`.${src}`);
     widgetPlaceholder.replaceChildren(); // empty placeholder
     let script = document.createElement('script');
@@ -11,6 +11,9 @@ export function createSymbolWidget(src,symbol,interval){
 
     if(src == 'timeline' || src == 'symbol-profile'){
         symbol = transformSymbol
+    }
+    if(interval =='3m' || interval =='6h' || interval =='8h' || interval =='12h' || interval =='3d' ){
+        interval = '1h'
     }
     script.innerHTML = JSON.stringify({
     "interval": interval,

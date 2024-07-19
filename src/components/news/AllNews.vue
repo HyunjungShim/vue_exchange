@@ -78,7 +78,7 @@ function handleScroll(){
 }
 
 function goDetailView(id){
-    console.log(router);
+    // console.log(router);
     console.log(id);
     router.push(`/news/post/${id}`)
 }

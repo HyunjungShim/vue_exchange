@@ -24,7 +24,7 @@ export default {
         },
         setCategory(state,payload) {
             state.categories = payload
-            console.log(state.categories);
+            // console.log(state.categories);
             state.initLoad = true
         }
     },
@@ -33,18 +33,18 @@ export default {
             try {
                 let res = await axios.get(`${baseUrl}/news/categories?extraParams=test&api_key=5d56928efe43a5bb686c78da44e6a7da2b2eca73339407aa2fdb7f9b2357433e`)
                 let result =  res.data;
-                console.log('category', result);
+                // console.log('category', result);
                 let majorCoin = ['BTC', "ETH", 'XRP','BNB']
                 let categories = [];
                 majorCoin.forEach((coin) => {
-                    console.log('coin', coin);
+                    // console.log('coin', coin);
                     let majorCategory = result.find((el) => el && el.wordsAssociatedWithCategory && el.wordsAssociatedWithCategory.includes(coin));
                     if (majorCategory) {
                         categories.push(...(majorCategory.wordsAssociatedWithCategory))
-                        console.log('categories', categories);
+                        // console.log('categories', categories);
                     }
                 })
-                console.log('categories', categories);
+                // console.log('categories', categories);
                 commit('setCategory',categories.join(','))
                 return categories.join(',')
             } catch (error) {

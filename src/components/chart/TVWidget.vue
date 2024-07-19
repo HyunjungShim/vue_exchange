@@ -25,13 +25,13 @@ let tvType = defineProps({
         type:String
     }
 })
-console.log(tvType);
+// console.log(tvType);
 watch(symbol,()=> {
-    console.log(symbol);
+    // console.log(symbol);
     createSymbolWidget(tvType.type,symbol.value,interval.value)
 })
 watch(interval,()=> {
-    console.log(symbol);
+    // console.log(symbol);
     createSymbolWidget(tvType.type,symbol.value,interval.value)
 })
 onMounted(()=> {

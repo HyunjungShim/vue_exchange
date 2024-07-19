@@ -13,13 +13,13 @@ export default {
     mutations:{
         setSymbolList(state,payload){
             state.symbolList =payload
-            console.log(state.symbolList);
+            // console.log(state.symbolList);
         },
         setMarketList(state,payload){
             state.marketList = payload
         },
         updateMarket(state,payload){
-            console.log('payload',payload.data);
+            // console.log('payload',payload.data);
             let marketData = payload.data
             marketData.filter(socketData=> {
                 state.marketList.forEach(element => {
@@ -34,7 +34,7 @@ export default {
             })
         },
         setSelectedSymbol(state, payload) {
-            console.log('symbol',payload.symbol,payload.interval);
+            // console.log('symbol',payload.symbol,payload.interval);
             if(payload.symbol){
                 state.selectedSymbol = payload.symbol;
             }
@@ -47,7 +47,7 @@ export default {
         async getExchangeInfo(context){
             try{
                 let res = await axios.get(`${baseUrl}/exchangeInfo`)
-                console.log('res',res.data);
+                // console.log('res',res.data);
                 let result = res.data.symbols;
                 let filterQuote = result.filter((el) => el.quoteAsset == "USDT");
                 let symbolList = filterQuote.map(el => el.symbol);
@@ -60,7 +60,7 @@ export default {
         async getMarketInfo({dispatch,commit}){
             try {
                 let symbolList = await dispatch('getExchangeInfo');
-                console.log('symbolList.length',symbolList.length);
+                // console.log('symbolList.length',symbolList.length);
                 // let sliceSymbolList = symbolList.slice(0,100)
                 const symbolsQueryParam = JSON.stringify(symbolList);
                 let res24 = await axios.get(`${baseUrl}/ticker/24hr?symbols=${decodeURI(symbolsQueryParam)}`)

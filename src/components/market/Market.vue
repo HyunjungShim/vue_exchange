@@ -58,19 +58,21 @@ import '@/assets/css/market.css'
 import { computed, onMounted,ref,onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-// import {createMarketSocket,reconnectMarketSocket,disconnectWebSocket} from "@/utils/streaming.js";
+import {createMarketSocket,reconnectMarketSocket,disconnectWebSocket,socket} from "@/utils/streaming.js";
 import Multiselect from 'vue-multiselect';
 const changeOptions = ref(['1h','4h','24h']);
 const selectedChange = ref('24h');
 const store = useStore();
 const router = useRouter()
 const marketList = computed(() => store.state.exchangeInfo.marketList || []);
-console.log(marketList.value);
+// console.log(marketList.value);
 const visibleIdx = ref(30);
 const scrollcheck =ref();
 onMounted(()=> {
+
   store.dispatch('exchangeInfo/getMarketInfo')
-  console.log(scrollcheck.value);
+  createMarketSocket(selectedChange.value)
+
   if (scrollcheck.value) {
     scrollcheck.value.addEventListener('scroll', handleScroll);
   }
@@ -97,7 +99,7 @@ const filteredMarket = computed(()=> {
   let orderType = sortType.value.split('-')[1];
   let lowerWord = searchWord.value.toLowerCase();
   let searchedMarket = [...marketList.value].filter((el)=> el.symbol.toLowerCase().includes(lowerWord))
-  console.log('searchMarket',searchedMarket);
+  // console.log('searchMarket',searchedMarket);
   if (sortName === 'symbol') {
     return searchedMarket.sort((a, b) => {
       return orderType === 'asc' ? (a.symbol > b.symbol ? 1 : -1) : (a.symbol < b.symbol ? 1 : -1);
@@ -110,8 +112,11 @@ const filteredMarket = computed(()=> {
     });
   }
 })
-watch(selectedChange,()=> {
-  console.log(selectedChange.value);
+watch(selectedChange,(newValue)=> {
+  // console.log(selectedChange.value);
+  if(socket){
+    reconnectMarketSocket(newValue)
+  }
 })
 onUnmounted(()=> {
   // disconnectWebSocket()
@@ -169,6 +174,7 @@ function pushWithQuery(symbol){
 
 onUnmounted(()=>{
   window.removeEventListener('scroll', handleScroll);
+  disconnectWebSocket()
 })
 
 </script>

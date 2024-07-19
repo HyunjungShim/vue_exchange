@@ -19,7 +19,7 @@ watch(
   () => route.fullPath,
   (newPath) => {
     currentPath.value = newPath.split('/')[1];
-    console.log('currentPath', currentPath.value);
+    // console.log('currentPath', currentPath.value);
   }
 );
 </script>

@@ -137,11 +137,11 @@ onMounted(() => {
     // getCandleData(candleStickSeries, volumeSeries);
 
     watch(selectedSymbol, (newValue,oldValue) => {
-        console.log('newValue,oldValue',newValue,oldValue);
+        // console.log('newValue,oldValue',newValue,oldValue);
         getCandleData(candleStickSeries, volumeSeries);
         store.commit(`exchangeInfo/setSelectedSymbol`,{symbol:selectedSymbol.value,interval:selectedInterval.value})
         if(socket){
-            console.log('selectedSymbol',selectedSymbol.value);
+            // console.log('selectedSymbol',selectedSymbol.value);
             reconnectWebSocket(selectedSymbol.value,selectedInterval.value,oldValue)
         }
     });
@@ -150,13 +150,13 @@ onMounted(() => {
         getCandleData(candleStickSeries, volumeSeries);
         store.commit(`exchangeInfo/setSelectedSymbol`,{symbol:selectedSymbol.value,interval:selectedInterval.value})
         if(socket){
-            console.log('selectedSymbol',selectedSymbol.value);
+            // console.log('selectedSymbol',selectedSymbol.value);
             reconnectWebSocket(selectedSymbol.value,selectedInterval.value)
         }
     });
 
     watch(candleSocket,(newValue,oldValue)=> {
-        console.log('oldValue lastBar',oldValue,'newValue lastBar',newValue);
+        // console.log('oldValue lastBar',oldValue,'newValue lastBar',newValue);
         if(oldValue.t <= newValue.t){
             candleStickSeries.update({
                 time:Number(candleSocket.value.t)/1000,
@@ -258,7 +258,7 @@ onUnmounted(() => {
 function getSymbolList() {
     axios.get('https://api.binance.com/api/v3/exchangeInfo')
         .then((res) => {
-            console.log('res',res.data);
+            // console.log('res',res.data);
             let result = res.data.symbols;
             let filterQuote = result.filter((el) => el.quoteAsset == "USDT");
             let symbolList = filterQuote.map(el => el.symbol);
@@ -290,7 +290,7 @@ async function getCandleData(candleStickSeries, volumeSeries) {
                 }
                 candleStickSeries.setData(candleArray);
                 volumeSeries.setData(volumeArray);
-                console.log(selectedSymbol.value);
+                // console.log(selectedSymbol.value);
             });
     }catch(error){
         console.log('error',error);

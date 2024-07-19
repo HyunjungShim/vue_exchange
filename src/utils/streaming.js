@@ -7,7 +7,7 @@ var channelString;
 export const createWebSocket = (symbol,interval) => {
     socket = new WebSocket('wss://stream.binance.com:9443/stream')
     socket.onopen = () => {
-        console.log('Connected to Binance WebSocket');
+        // console.log('Connected to Binance WebSocket');
         channelString = `${symbol}@kline_${interval}`
         let subscribeMsg = {
             "method" : "SUBSCRIBE",
@@ -17,11 +17,11 @@ export const createWebSocket = (symbol,interval) => {
             "id" : 1
         }
         socket.send(JSON.stringify(subscribeMsg))
-        console.log('subscirbe websocket');
+        // console.log('subscirbe websocket');
     };
 
     socket.onclose = () => {
-        console.log('Disconnected from Binance WebSocket');
+        // console.log('Disconnected from Binance WebSocket');
     };
 
     socket.onmessage = (event) => {
@@ -37,9 +37,9 @@ export const createWebSocket = (symbol,interval) => {
     }
 }
 export const reconnectWebSocket = (selectedSymbol,selectedInterval) => {
-    console.log('old symbol channelString',channelString);
+    // console.log('old symbol channelString',channelString);
     if (socket) {
-        console.log('socket has property');
+        // console.log('socket has property');
         if (socket.readyState === WebSocket.OPEN) {
             const unsubscribeMsg = {
                 method: "UNSUBSCRIBE",
@@ -51,7 +51,7 @@ export const reconnectWebSocket = (selectedSymbol,selectedInterval) => {
             socket.send(JSON.stringify(unsubscribeMsg));
 
             socket.close();
-            console.log('unsubscirbe');
+            // console.log('unsubscirbe');
         }
     }
     setTimeout(() => {
@@ -62,7 +62,7 @@ export const reconnectWebSocket = (selectedSymbol,selectedInterval) => {
 export const createMarketSocket = (change)=> {
     socket = new WebSocket('wss://stream.binance.com:9443/stream')
     socket.onopen = () => {
-        console.log('Connected to Binance WebSocket');
+        // console.log('Connected to Binance WebSocket');
         channelString = ["!ticker@arr@3000ms", "!ticker_1h@arr@3000ms", "!ticker_4h@arr@3000ms"]
         let subscribeMsg = {
             "method" : "SUBSCRIBE",
@@ -70,11 +70,11 @@ export const createMarketSocket = (change)=> {
             "id" : 1
         }
         socket.send(JSON.stringify(subscribeMsg))
-        console.log('subscirbe websocket');
+        // console.log('subscirbe websocket');
     };
 
     socket.onclose = () => {
-        console.log('Disconnected from Binance WebSocket');
+        // console.log('Disconnected from Binance WebSocket');
     };
 
     socket.onmessage = (event) => {
@@ -85,13 +85,13 @@ export const createMarketSocket = (change)=> {
         let eventMsg = message.data[0].e
         if(change =='24h' && eventMsg =='24hrTicker'){
             store.commit('exchangeInfo/updateMarket',{data:message.data})
-            console.log('message.data',message.data);
+            // console.log('message.data',message.data);
         }else if(change =='1h' && eventMsg =='1hTicker'){
             store.commit('exchangeInfo/updateMarket',{data:message.data})
-            console.log('message.data',message.data);
+            // console.log('message.data',message.data);
         }else if(change =='4h' && eventMsg =='4hTicker'){
             store.commit('exchangeInfo/updateMarket',{data:message.data})
-            console.log('message.data',message.data);
+            // console.log('message.data',message.data);
         }
     };
 
@@ -101,9 +101,9 @@ export const createMarketSocket = (change)=> {
 }
 
 export const reconnectMarketSocket = (change) => {
-    console.log('channelString',channelString);
+    // console.log('channelString',channelString);
     if (socket) {
-        console.log('socket has property');
+        // console.log('socket has property');
         if (socket.readyState === WebSocket.OPEN) {
             const unsubscribeMsg = {
                 method: "UNSUBSCRIBE",
@@ -115,7 +115,7 @@ export const reconnectMarketSocket = (change) => {
             socket.send(JSON.stringify(unsubscribeMsg));
 
             socket.close();
-            console.log('unsubscirbe');
+            // console.log('unsubscirbe');
         }
     }
     setTimeout(() => {
@@ -134,6 +134,6 @@ export const disconnectWebSocket = () => { //
         };
         socket.send(JSON.stringify(unsubscribeMsg));
         socket.close();
-        console.log('disconnect method execute');
+        // console.log('disconnect method execute');
     }
 }
