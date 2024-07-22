@@ -21,12 +21,13 @@ const store = useStore();
 let chart;
 const chartContainer = ref();
 let localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-let symbolOptions = ref([]);
+let symbolOptions = ref(store.state.exchangeInfo.symbolList);
 const selectedSymbol = ref(store.state.exchangeInfo.selectedSymbol);
 const intervalOptions = ref(['1m','3m','5m','15m','30m','1h','2h','4h','6h','8h','12h','1d','3d','1w','1M'])
 const selectedInterval = ref('1h')
 let initLoad = ref(false);
-getSymbolList();
+// getSymbolList();
+
 let chartOptions = ref({
     trackingMode: {
         exitMode:1
@@ -104,6 +105,11 @@ onMounted(() => {
         upColor:"#5DB9CD",
         downColor:"#EE7272",
         color:"#fff",
+        priceFormat:{
+            type:'price',
+            precision: 5,
+            minMove: 0.00001
+        }
     });
     const volumeSeries = chart.addHistogramSeries({
         upColor:"#5DB9CD",
@@ -116,15 +122,11 @@ onMounted(() => {
     });
 
     candleStickSeries.priceScale().applyOptions({
+        autoScale:true,
         scaleMargins: {
             top: 0.1,
             bottom: 0.3,
         },
-        priceFormat:{
-            type:'price',
-            precision: 5,
-            minMove: 0.00001
-        }
     });
 
     volumeSeries.priceScale().applyOptions({
@@ -134,8 +136,6 @@ onMounted(() => {
         },
     });
 
-    // getCandleData(candleStickSeries, volumeSeries);
-
     watch(selectedSymbol, (newValue,oldValue) => {
         // console.log('newValue,oldValue',newValue,oldValue);
         getCandleData(candleStickSeries, volumeSeries);
@@ -144,6 +144,7 @@ onMounted(() => {
             // console.log('selectedSymbol',selectedSymbol.value);
             reconnectWebSocket(selectedSymbol.value,selectedInterval.value,oldValue)
         }
+        updateLegend(undefined);
     });
     watch(selectedInterval, (newValue,oldValue) => {
         console.log('newValue,oldValue',newValue,oldValue);
@@ -153,6 +154,7 @@ onMounted(() => {
             // console.log('selectedSymbol',selectedSymbol.value);
             reconnectWebSocket(selectedSymbol.value,selectedInterval.value)
         }
+        updateLegend(undefined);
     });
 
     watch(candleSocket,(newValue,oldValue)=> {
@@ -255,16 +257,6 @@ onUnmounted(() => {
 
 });
 
-function getSymbolList() {
-    axios.get('https://api.binance.com/api/v3/exchangeInfo')
-        .then((res) => {
-            // console.log('res',res.data);
-            let result = res.data.symbols;
-            let filterQuote = result.filter((el) => el.quoteAsset == "USDT");
-            let symbolList = filterQuote.map(el => el.symbol);
-            symbolOptions.value = symbolList;
-        });
-}
 
 async function getCandleData(candleStickSeries, volumeSeries) {
     try{
@@ -290,7 +282,6 @@ async function getCandleData(candleStickSeries, volumeSeries) {
                 }
                 candleStickSeries.setData(candleArray);
                 volumeSeries.setData(volumeArray);
-                // console.log(selectedSymbol.value);
             });
     }catch(error){
         console.log('error',error);

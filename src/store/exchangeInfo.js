@@ -49,8 +49,9 @@ export default {
                 let res = await axios.get(`${baseUrl}/exchangeInfo`)
                 // console.log('res',res.data);
                 let result = res.data.symbols;
-                let filterQuote = result.filter((el) => el.quoteAsset == "USDT");
+                let filterQuote = result.filter((el) => el.quoteAsset == "USDT" && el.status == "TRADING");
                 let symbolList = filterQuote.map(el => el.symbol);
+                // console.log(symbolList);
                 context.commit("setSymbolList",symbolList)
                 return symbolList
             }catch(error){
