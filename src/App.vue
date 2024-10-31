@@ -1,42 +1,38 @@
 <template>
-  <div class="wrapper" :class="{'all-news' : currentPath === 'news' }">
-    <Header/>
+  <Layout>
     <router-view/>
-  </div>
+  </Layout>
 </template>
 
 <script setup>
-import Header from '@/components/Header.vue';
-import '@/assets/css/vue-multiselect.css';
-import '@/assets/css/setting.css';
-import { useRoute } from 'vue-router';
-import { ref, watch } from 'vue';
-
-const route = useRoute();
-const currentPath = ref(route.fullPath.split('/')[1]);
-
-watch(
-  () => route.fullPath,
-  (newPath) => {
-    currentPath.value = newPath.split('/')[1];
-    // console.log('currentPath', currentPath.value);
-  }
-);
+import Layout from '@/views/Layout.vue';
+// import { computed,watch,onMounted,nextTick } from 'vue';
+// import { useStore } from 'vuex';
+// const store = useStore();
+// let isDark = computed(()=>  store.state.colorMode.isDark)
+// const toggleColorMode = async(isDark) => {
+//     // if (colorModeImg.value) {
+//         await nextTick(); // DOM 업데이트가 완료될 때까지 기다립니다.
+//         // if (isDark) {
+//         //     colorModeImg.value.classList.add('isDark')
+//         //     colorModeImgSrc.value = require('@/assets/images/dark-icon.png');
+//         // } else {
+//         //     colorModeImg.value.classList.remove('isDark')
+//         //     colorModeImgSrc.value = require('@/assets/images/light-icon.png');
+//         // }
+//         console.log('다함');
+        
+//     // }
+// }
+// watch(isDark, async (newVal) => {
+//     await toggleColorMode(newVal)
+// });
+// onMounted(()=> {
+//     toggleColorMode(isDark.value)
+// })
 </script>
 
-<style>
-@media screen and (max-width: 1024px) {
-    .wrapper {
-      width: 95vw;
-      margin-top: 10rem;
-    }
-    .wrapper.wrapper.all-news {
-      width: 95vw;
-    }
-}
-@media screen and (max-width: 768px) {
-    .wrapper.all-news {
-      margin-top: 8rem;
-    }
-}
+<style lang="scss">
+@import '@/assets/scss/commons/vue-multiselect.scss';
+@import "@/assets/scss/commons/setting.scss";
 </style>

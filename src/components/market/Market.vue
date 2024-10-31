@@ -8,7 +8,8 @@
     <div></div>
     <div class="search-container">
       <input class="symbol-search" placeholder="Search Coin Name" v-model="searchWord"/>
-      <img src="@/assets/images/search-icon.svg"/>
+      <img v-if ='isDark' src="@/assets/images/search-icon.svg"/>
+      <img v-else src="@/assets/images/search-icon-light.svg"/>
     </div>
   </div>
   <div class="market-container">
@@ -44,17 +45,13 @@
         <p v-else-if="market.priceChangePercent == 0">{{ formatPercent(market.priceChangePercent) }}%</p>
         <p>{{ formatPrice(market.highPrice) }} / {{ formatPrice(market.lowPrice) }}</p>
         <p>{{ formatVolume(market.quoteVolume) }}</p>
-        <p class="chart-icon-box" @click="pushWithQuery(market.symbol)"
-        >
-        </p>
+        <p class="chart-icon-box" :class="{'isDark' : isDark}" @click="pushWithQuery(market.symbol)"></p>
       </div>
     </div>
   </div>
 </div>
 </template>
-
 <script setup>
-import '@/assets/css/market.css'
 import { computed, onMounted,ref,onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -68,8 +65,8 @@ const marketList = computed(() => store.state.exchangeInfo.marketList || []);
 // console.log(marketList.value);
 const visibleIdx = ref(30);
 const scrollcheck =ref();
+let isDark = computed(()=>  store.state.colorMode.isDark)
 onMounted(()=> {
-
   store.dispatch('exchangeInfo/getMarketInfo')
   createMarketSocket(selectedChange.value)
 
@@ -95,21 +92,21 @@ const sortImages = ref({
 });
 const searchWord = ref('');
 const filteredMarket = computed(()=> {
-  let sortName = sortType.value.split('-')[0];
-  let orderType = sortType.value.split('-')[1];
-  let lowerWord = searchWord.value.toLowerCase();
-  let searchedMarket = [...marketList.value].filter((el)=> el.symbol.toLowerCase().includes(lowerWord))
+let sortName = sortType.value.split('-')[0];
+let orderType = sortType.value.split('-')[1];
+let lowerWord = searchWord.value.toLowerCase();
+let searchedMarket = [...marketList.value].filter((el)=> el.symbol.toLowerCase().includes(lowerWord))
   // console.log('searchMarket',searchedMarket);
   if (sortName === 'symbol') {
-    return searchedMarket.sort((a, b) => {
-      return orderType === 'asc' ? (a.symbol > b.symbol ? 1 : -1) : (a.symbol < b.symbol ? 1 : -1);
-    });
+      return searchedMarket.sort((a, b) => {
+        return orderType === 'asc' ? (a.symbol > b.symbol ? 1 : -1) : (a.symbol < b.symbol ? 1 : -1);
+      });
   } else if (sortName === 'default') {
-    return searchedMarket;
+      return searchedMarket;
   } else {
-    return searchedMarket.sort((a, b) => {
-      return orderType === 'asc' ? a[sortName] - b[sortName] : b[sortName] - a[sortName];
-    });
+      return searchedMarket.sort((a, b) => {
+        return orderType === 'asc' ? a[sortName] - b[sortName] : b[sortName] - a[sortName];
+      });
   }
 })
 watch(selectedChange,(newValue)=> {
@@ -180,5 +177,5 @@ onUnmounted(()=>{
 </script>
 
 <style lang="scss" scoped>
-
+@import '@/assets/scss/components/market/market.scss';
 </style>

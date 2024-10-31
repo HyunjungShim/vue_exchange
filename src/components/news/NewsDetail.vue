@@ -3,15 +3,16 @@
         <NewsMenu/>
         <div class="news-container detail">
             <div class="news-list">
-                <img src="@/assets/images/left-arrow.svg" @click="$router.go(-1)"/>
-                <h1 class="news-title">{{ post.title }}</h1>
-                <p>{{ displayDate(post.published_on *1000) }}</p>
-                <p class="news-detail-content">{{ post.body }}</p>
+                <img v-if="isDark" src="@/assets/images/left-arrow.svg" @click="$router.go(-1)"/>
+                <img v-else src="@/assets/images/left-arrow-light.svg" @click="$router.go(-1)"/>
+                <h1 class="news-title">{{ post?.title }}</h1>
+                <p>{{ displayDate(post?.published_on *1000) }}</p>
+                <p class="news-detail-content">{{ post?.body }}</p>
                 <div class="align-center news-info">
-                    <img :src="post.source_info.img"/>
+                    <img :src="post?.source_info.img"/>
                     <div>
-                        <p>{{ post.source_info.name }}</p>
-                        <button @click="routerPush(post.url)">See Original News</button>
+                        <p>{{ post?.source_info.name }}</p>
+                        <button @click="routerPush(post?.url)">See Original News</button>
                     </div>
                 </div>
                 <div class="coin-label margin">
@@ -31,11 +32,11 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import {displayDate} from '@/utils/convertTime'
 import NewsMenu from '@/components/news/NewsMenu.vue'
-
 const route = useRoute();
 const postId = ref(route.params.id);
 const store = useStore();
-// console.log(postId.value);
+let isDark = computed(()=>  store.state.colorMode.isDark)
+
 const post = computed(()=> {
     // console.log('store.state.newsList.LatestNewsMain',store.state.newsList.allLatestNews);
     return store.state.newsList.allLatestNews.find((el)=> el.id == postId.value)
@@ -47,5 +48,7 @@ const tags = computed(()=> {
 function routerPush(url){
     window.open(url, '_blank');
 }
-
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/components/news/news.scss';
+</style>

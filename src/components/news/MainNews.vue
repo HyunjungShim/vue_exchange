@@ -38,7 +38,6 @@
 </template>
 
 <script setup>
-import "@/assets/css/news.css"
 import {computed} from 'vue';
 import { useStore } from 'vuex';
 import {displayDate} from '@/utils/convertTime'
@@ -56,3 +55,6 @@ function routerPush(url){
     window.open(url, '_blank');
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/components/news/news.scss';
+</style>

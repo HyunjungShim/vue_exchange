@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import MarketView from '@/views/MarketView.vue';
+import MarketView from '@/views/market/MarketView.vue';
 import MainNews from '@/components/news/MainNews.vue'
 </script>
 

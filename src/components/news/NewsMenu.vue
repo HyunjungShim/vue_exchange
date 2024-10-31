@@ -1,48 +1,30 @@
 <template>
 <div class="news-menu">
     <h1>News</h1>
-    <p>
-        <label for='all' class="color-active">
-            <input type="radio" id='all' v-model="sort" value="all" @change="handleSortChange"/>Latest
-        </label>
-    </p>
-    <p>
-        <label for="major">
-            <input type="radio" v-model="sort" value="major" id='major' @change="handleSortChange"/>Major
-        </label>
-    </p>
-    <p>
-        <label for='btc'>
-            <input type="radio" v-model="sort" value="btc" id='btc' @change="handleSortChange"/>Bitcoin News
-        </label>
-    </p>
-    <p>
-        <label for='eth'>
-            <input type="radio" v-model="sort" value="eth" id='eth' @change="handleSortChange"/>Ethereum News
-        </label>
-    </p>
-    <p>
-        <label for='bnb'>
-            <input type="radio" v-model="sort" value="bnb" id='bnb' @change="handleSortChange"/>BNB News
-        </label>
-    </p>
-    <p>
-        <label for='xrp'>
-            <input type="radio" v-model="sort" value="xrp" id='xrp' @change="handleSortChange"/>XRP News
+    <p v-for="type in newsType" :key="type" :class="{'color-active': sort == type.id}">
+        <label :for="type.id">
+            <input type="radio" v-model="sort" :value="type.id" :id='type.id' @change="handleSortChange"/>{{ type.label }}
         </label>
     </p>
 </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import {ref} from 'vue';
+import { useRouter,useRoute } from 'vue-router';
+import {reactive, ref} from 'vue';
 
-const router = useRouter()
-const sort = ref('latest');
-
+const router = useRouter();
+const route = useRoute();
+const sort = ref( route.path.split('/')[2]||'all');
+const newsType = reactive([
+    {id:'all',label:'Latest'},
+    {id:'major',label:'Major'},
+    {id:'btc',label:'Bitcoin News'},
+    {id:'eth',label:'Ethereum News'},
+    {id:'bnb',label:'BNB News'},
+    {id:'xrp',label:'XRP News'},
+])
 function handleSortChange(event){
-    // console.log(event.target.value);
     document.querySelectorAll('input[type="radio"]').forEach((radio)=> {
         radio.parentNode.classList.remove('color-active')
     })
@@ -51,3 +33,6 @@ function handleSortChange(event){
     router.push(`/news/${url}`)
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/components/news/news.scss';
+</style>

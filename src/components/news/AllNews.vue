@@ -40,16 +40,18 @@ const displayNews = computed(()=> {
         return allNews.value
     }else if(category.value == 'major'){
         return majorNews.value
-    }else if(category.value == 'btc'){
-        return allNews.value.filter((el)=> el.categories.includes("BTC"))
-    }else if(category.value == 'eth'){
-        return allNews.value.filter((el)=> el.categories.includes("ETH"))
-    }else if(category.value == 'bnb'){
-        return allNews.value.filter((el)=> el.categories.includes("BNB"))
-    }else if(category.value == 'xrp'){
-        return allNews.value.filter((el)=> el.categories.includes("XRP"))
+    }else {
+        return allNews.value.filter((el)=> el.categories.includes(category.value.toUpperCase()))
     }
-    return allNews.value
+    // else if(category.value == 'btc'){
+    //     return allNews.value.filter((el)=> el.categories.includes("BTC"))
+    // }else if(category.value == 'eth'){
+    //     return allNews.value.filter((el)=> el.categories.includes("ETH"))
+    // }else if(category.value == 'bnb'){
+    //     return allNews.value.filter((el)=> el.categories.includes("BNB"))
+    // }else if(category.value == 'xrp'){
+    //     return allNews.value.filter((el)=> el.categories.includes("XRP"))
+    // }
 })
 const scrollCheck = ref();
 const visibleIdx = ref(5)
@@ -59,14 +61,7 @@ onMounted(()=> {
         store.dispatch('newsList/getAllNews') // news 2분마다 업데이트
     },120000)
 })
-// function handleSortChange(event) {
-//     console.log('Selected sort value:', event.target.value);
-    // document.querySelectorAll('input[type="radio"]').forEach((radio)=> {
-    //     radio.parentNode.classList.remove('color-active')
-    // })
-    // document.querySelector(`#${event.target.value}`).parentNode.classList.add('color-active')
-//     visibleIdx.value = 5
-// }
+
 function handleScroll(){
     const scrollTop = scrollCheck.value.scrollTop;
     const scrollHeight = scrollCheck.value.scrollHeight;
@@ -78,8 +73,6 @@ function handleScroll(){
 }
 
 function goDetailView(id){
-    // console.log(router);
-    console.log(id);
     router.push(`/news/post/${id}`)
 }
 
@@ -87,5 +80,6 @@ onUnmounted(()=> {
     window.removeEventListener('scroll',handleScroll)
 })
 </script>
-<style lang="css">
+<style lang="scss" scoped>
+@import '@/assets/scss/components/news/news.scss';
 </style>

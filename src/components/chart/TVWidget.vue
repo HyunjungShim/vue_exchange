@@ -11,7 +11,6 @@
 import {computed,  onMounted,  watch,defineProps} from 'vue';
 import {useStore} from 'vuex';
 import { createSymbolWidget } from '@/utils/createWidget.js'
-import '@/assets/css/chart.css';
 const store = useStore();
 let symbol = computed(()=> {
     return store.state.exchangeInfo.selectedSymbol
@@ -19,6 +18,8 @@ let symbol = computed(()=> {
 let interval = computed(()=> {
     return store.state.exchangeInfo.selectedInterval
 })
+
+let isDark = computed(()=>  store.state.colorMode.isDark)
 
 let tvType = defineProps({
     type: {
@@ -34,11 +35,16 @@ watch(interval,()=> {
     // console.log(symbol);
     createSymbolWidget(tvType.type,symbol.value,interval.value)
 })
+
+watch(isDark,()=> {
+    createSymbolWidget(tvType.type,symbol.value,interval.value,isDark.value)
+})
+
 onMounted(()=> {
-    createSymbolWidget(tvType.type,symbol.value,interval.value)
+    createSymbolWidget(tvType.type,symbol.value,interval.value,isDark.value)
 })
 </script>
 
 <style lang="scss" scoped>
-
+@import '@/assets/scss/components/chart/chart.scss';
 </style>

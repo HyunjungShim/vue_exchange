@@ -10,14 +10,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, onUnmounted, watch } from 'vue';
+import { onMounted, ref, onUnmounted, watch, computed } from 'vue';
 import { createChart } from 'lightweight-charts';
 import axios from 'axios';
 import Multiselect from 'vue-multiselect';
 import {reconnectWebSocket,candleSocket,socket,disconnectWebSocket, createWebSocket} from "@/utils/streaming.js";
 import { useStore } from 'vuex';
 const store = useStore();
-
+let isDark = computed(()=>  store.state.colorMode.isDark)
 let chart;
 const chartContainer = ref();
 let localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -26,7 +26,6 @@ const selectedSymbol = ref(store.state.exchangeInfo.selectedSymbol);
 const intervalOptions = ref(['1m','3m','5m','15m','30m','1h','2h','4h','6h','8h','12h','1d','3d','1w','1M'])
 const selectedInterval = ref('1h')
 let initLoad = ref(false);
-// getSymbolList();
 
 let chartOptions = ref({
     trackingMode: {
@@ -51,15 +50,15 @@ let chartOptions = ref({
         ticksVisible:true,
     },
     layout: {
-        background: { color: '#1D1D2B' },
-        textColor: '#fff',
+        background: { color: isDark.value ? '#1D1D2B' : '#fff'},
+        textColor: isDark.value ? '#fff' : '#1D1D2B',
     },
     grid: {
         vertLines: {
-            color: '#505050',
+            color: isDark.value ? '#505050' : '#cdcdcd',
         },
         horzLines: {
-            color: '#505050',
+            color: isDark.value ? '#505050' : '#cdcdcd',
         },
     },
     timeScale: {
@@ -96,7 +95,22 @@ let chartOptions = ref({
         }
     },
 });
-
+let chartColorMode = computed(()=>{
+    return {
+        layout: {
+            background: { color: isDark.value ? '#1D1D2B' : '#fff'},
+            textColor: isDark.value ? '#fff' : '#1D1D2B',
+        },
+        grid: {
+            vertLines: {
+                color: isDark.value ? '#505050' : '#cdcdcd',
+            },
+            horzLines: {
+                color: isDark.value ? '#505050' : '#cdcdcd',
+            },
+        }
+    }
+})
 onMounted(() => {
     chart = createChart(chartContainer.value, chartOptions.value);
     const candleStickSeries = chart.addCandlestickSeries({
@@ -174,7 +188,10 @@ onMounted(() => {
             })
         }
     })
-
+    watch(chartColorMode, (newVal) => {
+        chart.applyOptions(newVal);
+        console.log(chart.options());
+    });
     const container = chartContainer.value;
 
     const legend = document.createElement('div');
@@ -231,9 +248,9 @@ onMounted(() => {
             day: '2-digit',
             hour: '2-digit',
             hour12: false,
+            minute:'2-digit',
             timeZone: 'Asia/Seoul',
         };
-
         let timestampToString = ToDate.toLocaleString('ko-KR', options);
 
         setTooltipHtml(selectedSymbol.value, timestampToString, openPriceFormatted,highPriceFormatted,lowPriceFormatted,closePriceFormatted);
@@ -250,13 +267,14 @@ onMounted(() => {
 
 onUnmounted(() => {
     if (chart) {
+        if(socket){
+            disconnectWebSocket()
+        }
         chart.remove();
         chart = null;
-        disconnectWebSocket()
     }
 
 });
-
 
 async function getCandleData(candleStickSeries, volumeSeries) {
     try{
@@ -299,4 +317,5 @@ function formatPrice(price){
 </script>
 
 <style scoped>
+@import '@/assets/scss/components/chart/chart.scss'
 </style>

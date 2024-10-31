@@ -124,7 +124,7 @@ export const reconnectMarketSocket = (change) => {
 };
 
 export const disconnectWebSocket = () => { //
-    if (socket) {
+    if (socket && socket.readyState != WebSocket.CONNECTING) {
         const unsubscribeMsg = {
             method: "UNSUBSCRIBE",
             params: [

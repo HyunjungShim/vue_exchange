@@ -1,12 +1,11 @@
 import NotFound from '@/views/NotFound.vue';
 // import MainView from '@/views/MainView.vue';
-import ChartView from '@/views/ChartView.vue';
-import MarketView from '@/views/MarketView.vue';
+import ChartView from '@/views/chart/ChartView.vue';
+import MarketView from '@/views/market/MarketView.vue';
 // import store from '@/store/index'
 import MainView from '@/views/MainView.vue';
-import NewsView from '@/views/NewsView.vue';
-import NewsDetailView from '@/views/NewsDetailView.vue';
-import test from '@/components/test.vue'
+import NewsView from '@/views/news/NewsView.vue';
+import NewsDetailView from '@/views/news/NewsDetailView.vue';
 const routes = [
     {
         path:'/',
@@ -38,10 +37,6 @@ const routes = [
         //         // next(false)
         //     }
         // }
-    },
-    {
-        path: "/test",
-        component: test
     },
     {
         path: "/404",

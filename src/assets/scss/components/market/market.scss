@@ -1,0 +1,229 @@
+.market-wrapper {
+    background: var(--market-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    padding: 2rem;
+    .market-title {
+        align-items: baseline;
+        grid-template-columns: 250px 1fr 0fr 1fr 1fr 1fr;
+        span {
+            font-size: 1.8rem;
+        }
+        h2 {
+            width: fit-content;
+            &::after {
+                content: '';
+                width: 95%;
+                height: 2.5px;
+                background: var(--color-active);
+                display: block;
+                margin:0.5rem auto 0;
+            }
+        }
+        .search-container {
+            position: relative;
+            img {
+                width: 17px;
+                position: absolute;
+                left:8px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .symbol-search {
+                margin-right: auto;
+                border: 1px solid var(--color-dark);
+                background: transparent;
+                border-radius: 0.5rem;
+                color: var(--color-main);
+                padding: 1rem 0.5rem;
+                padding-left: 2.8rem;
+                transition: all 0.3s;
+                font-weight: bold;
+                &:focus {
+                    outline: 1px solid var(--color-active);
+        
+                }
+            }
+        }
+    }
+    .market-container {
+        p {
+            font-size: 1.6rem;
+            /* flex-basis: 155px; */
+            text-align: center;
+            font-weight: bold;
+            &.sort {
+                .arrow-up{
+                    width: 0px;
+                    height: 0px;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    border-bottom: 5px solid var(--color-main);
+                    cursor: pointer;
+                }
+                .arrow-down{
+                    width: 0px;
+                    height: 0px;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    border-top: 5px solid var(--color-main);
+                    cursor: pointer;
+                }
+                &.flex-center {
+                  flex-direction: column;
+                  min-height: 15px;
+                  justify-content: space-between;
+                }
+            }
+        }
+        .market-top {
+            div {
+                &:first-child {
+                    justify-content:flex-start;
+                }
+            }
+            p {
+                color: var(--color-dark);
+            }
+            .flex-center {
+                gap: 5px;
+            }
+        }
+        .market-content {
+            height: 500px;
+            overflow-y: scroll;
+            >div {
+                &:hover {
+                    background-color: var(--color-hover);
+                }
+            }
+            &::-webkit-scrollbar {
+                width:var(--scroll-width) ;
+                display: none;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color:var(--scroll-thumb-color);
+                border-radius: 1rem;
+            }
+            &::-webkit-scrollbar-track {
+                /* background-color:var(--scroll-track-color); */
+                background-color: transparent;
+                border-radius: 1rem;
+            }
+            .grid-between {
+                p {
+                    &:first-child {
+                        text-align: left;
+                    }
+                }
+            }
+            .chart-icon-box {
+                cursor: pointer;
+                background: url('@/assets/images/chart-icon-light.svg') no-repeat center /100% 100%;
+                display: block;
+                min-height: 22px;
+                &:hover {
+                    background: url('@/assets/images/chart-icon-hover.svg') no-repeat center /100% 100%;
+                    display: block;
+                    min-height: 22px;
+                }
+                &.isDark {
+                    background: url('@/assets/images/chart-icon.svg') no-repeat center /100% 100%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width : 1024px){        
+    .market-wrapper {
+        .market-title {
+            display: flex;
+            justify-content: flex-start;        
+            .search-container {
+                margin-left: auto;
+                .symbol-search {
+                    margin-right:inherit;
+                }
+            }
+        }
+        .market-container {
+            p {
+                font-size: 1.4rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width : 768px){
+    .market-wrapper {
+        .market-title {
+            display: grid;
+            grid-template-columns: 1fr 3fr 0.5fr 0.5fr 0.5fr;
+            margin-bottom: 2rem;
+        }
+        .market-container {
+            div {
+                &.grid-between {
+                    grid-template-columns: 1fr 1fr 1fr;
+                }
+            }
+            .market-top {
+                div {
+                    &:first-child {
+                        justify-content: center;
+                    }
+                }
+            }
+            .market-content {
+                .grid-between {
+                    p {
+                        &:first-child {
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width : 576px){
+    .market-wrapper {
+        .market-title {
+            display: grid;
+            grid-template-columns: 1fr;
+            h1{
+                margin: 0;
+            }
+            h2 {
+                margin: 0;
+                margin-bottom: 2rem;
+            }
+            div{
+                display: none;
+                &.search-container {
+                    display: block;
+                    margin-left: inherit;
+                }
+            }
+        }
+        .market-container {
+            .market-top  {
+                div {
+                    &:first-child {
+                        &.change {
+                            flex-direction: column;
+                        }
+                    }
+                }
+                p {
+                    margin: 0.3rem 0;
+                }
+            }
+            .market-content {
+                height: 420px;
+            }
+        }
+    }
+}
