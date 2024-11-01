@@ -14,126 +14,25 @@ import { onMounted, ref, onUnmounted, watch, computed } from 'vue';
 import { createChart } from 'lightweight-charts';
 import axios from 'axios';
 import Multiselect from 'vue-multiselect';
-import {reconnectWebSocket,candleSocket,socket,disconnectWebSocket, createWebSocket} from "@/utils/streaming.js";
+import {reconnectWebSocket,candleSocket,socket,disconnectWebSocket, createWebSocket} from "@/utils/chart/streaming.js";
 import { useStore } from 'vuex';
+import { chartOptions } from '@/utils/chart/chartOptions';
+import { setVolumeColor,formatPriceWithDecimal } from '@/utils/formatter/convertNumber';
 const store = useStore();
-let isDark = computed(()=>  store.state.colorMode.isDark)
+let isDark = computed(()=>  store.state.colorMode.isDark);
 let chart;
 const chartContainer = ref();
-let localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let symbolOptions = ref(store.state.exchangeInfo.symbolList);
 const selectedSymbol = ref(store.state.exchangeInfo.selectedSymbol);
-const intervalOptions = ref(['1m','3m','5m','15m','30m','1h','2h','4h','6h','8h','12h','1d','3d','1w','1M'])
-const selectedInterval = ref('1h')
+const intervalOptions = ref(['1m','3m','5m','15m','30m','1h','2h','4h','6h','8h','12h','1d','3d','1w','1M']);
+let  chartOption = new chartOptions();
+const selectedInterval = ref('1h');
 let initLoad = ref(false);
 
-let chartOptions = ref({
-    trackingMode: {
-        exitMode:1
-    },
-    kineticScroll: {
-        mouse:false
-    },
-    autoSize:true,
-    leftPriceScale: {
-        borderVisible: false,
-        visible:false,
-    },
-    overlayPriceScale:{
-        position:'left',
-        borderVisible: false,
-        visible:false,
-    },
-    rightPriceScale: {
-        visible: true,
-        borderColor: '#505050',
-        ticksVisible:true,
-    },
-    layout: {
-        background: { color: isDark.value ? '#1D1D2B' : '#fff'},
-        textColor: isDark.value ? '#fff' : '#1D1D2B',
-    },
-    grid: {
-        vertLines: {
-            color: isDark.value ? '#505050' : '#cdcdcd',
-        },
-        horzLines: {
-            color: isDark.value ? '#505050' : '#cdcdcd',
-        },
-    },
-    timeScale: {
-        barSpacing: 11,
-        timeVisible: true,
-        tickMarkFormatter(time) {
-            var convertTime = new Date(time * 1000);
-            let optionsT = {
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: "2-digit",
-                hour12: false,
-                timeZone: localTimezone,
-            };
-            let localTime = convertTime.toLocaleString('en-US', optionsT).replace(',', '');
-            localTime = localTime.replace(/\//g, '-');
-            return localTime;
-        },
-    },
-    crosshair: {
-        mode: 0,
-    },
-    localization:{
-        timeFormatter(originalTime, timeZone) {
-            const zonedDate = new Date(new Date(originalTime * 1000).toLocaleString('en-US', { timeZone }));
-            const year = zonedDate.getFullYear();
-            const month = (zonedDate.getMonth() + 1).toString().padStart(2, '0');
-            const day = zonedDate.getDate().toString().padStart(2, '0');
-            const hours = zonedDate.getHours().toString().padStart(2, '0');
-            const minutes = zonedDate.getMinutes().toString().padStart(2, '0');
-            let formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-            return formattedDateTime;
-        }
-    },
-});
-let chartColorMode = computed(()=>{
-    return {
-        layout: {
-            background: { color: isDark.value ? '#1D1D2B' : '#fff'},
-            textColor: isDark.value ? '#fff' : '#1D1D2B',
-        },
-        grid: {
-            vertLines: {
-                color: isDark.value ? '#505050' : '#cdcdcd',
-            },
-            horzLines: {
-                color: isDark.value ? '#505050' : '#cdcdcd',
-            },
-        }
-    }
-})
 onMounted(() => {
-    chart = createChart(chartContainer.value, chartOptions.value);
-    const candleStickSeries = chart.addCandlestickSeries({
-        title:'Candle',
-        priceScaleId: 'right',
-        upColor:"#5DB9CD",
-        downColor:"#EE7272",
-        color:"#fff",
-        priceFormat:{
-            type:'price',
-            precision: 5,
-            minMove: 0.00001
-        }
-    });
-    const volumeSeries = chart.addHistogramSeries({
-        upColor:"#5DB9CD",
-        downColor:"#EE7272",
-        color: '#26a69a',
-        priceFormat: {
-            type: 'volume',
-        },
-        priceScaleId: '',
-    });
+    chart = createChart(chartContainer.value, chartOption.getOptions(isDark.value));
+    const candleStickSeries = chart.addCandlestickSeries(chartOption.getSeriesOptions('candle'));
+    const volumeSeries = chart.addHistogramSeries(chartOption.getSeriesOptions('histogram'));
 
     candleStickSeries.priceScale().applyOptions({
         autoScale:true,
@@ -188,12 +87,12 @@ onMounted(() => {
             })
         }
     })
-    watch(chartColorMode, (newVal) => {
-        chart.applyOptions(newVal);
-        console.log(chart.options());
-    });
-    const container = chartContainer.value;
 
+    watch(isDark, (newVal) => {
+        chart.applyOptions(chartOption.getColorMode(newVal));
+    });
+
+    const container = chartContainer.value;
     const legend = document.createElement('div');
     legend.style = `position: absolute; left: 12px; top: 12px; z-index: 1; font-size: 14px; font-family: sans-serif; line-height: 18px; font-weight: 300;`;
     legend.style.color = 'black';
@@ -231,10 +130,10 @@ onMounted(() => {
         let lowPrice =  bar.low
         let closePrice =  bar.close
 
-        let openPriceFormatted = formatPrice(openPrice);
-        let highPriceFormatted = formatPrice(highPrice);
-        let lowPriceFormatted = formatPrice(lowPrice);
-        let closePriceFormatted = formatPrice(closePrice);
+        let openPriceFormatted = formatPriceWithDecimal(openPrice);
+        let highPriceFormatted = formatPriceWithDecimal(highPrice);
+        let lowPriceFormatted = formatPriceWithDecimal(lowPrice);
+        let closePriceFormatted = formatPriceWithDecimal(closePrice);
         // console.log(openPrice,highPrice,lowPrice,closePrice);
         // var time = bar.time;
 
@@ -304,15 +203,6 @@ async function getCandleData(candleStickSeries, volumeSeries) {
     }catch(error){
         console.log('error',error);
     }
-}
-
-function setVolumeColor(allQuote, buyQuote) {
-    let sellQuote = (allQuote - buyQuote).toFixed(0);
-    return sellQuote > buyQuote ? '#EE7272' : '#5DB9CD';
-}
-
-function formatPrice(price){
-    return price.toFixed(4);
 }
 </script>
 

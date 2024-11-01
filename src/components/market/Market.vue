@@ -55,8 +55,9 @@
 import { computed, onMounted,ref,onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import {createMarketSocket,reconnectMarketSocket,disconnectWebSocket,socket} from "@/utils/streaming.js";
+import {createMarketSocket,reconnectMarketSocket,disconnectWebSocket,socket} from "@/utils/chart/streaming.js";
 import Multiselect from 'vue-multiselect';
+import {formatPrice, formatVolume , formatPercent} from '@/utils/formatter/convertNumber.js'
 const changeOptions = ref(['1h','4h','24h']);
 const selectedChange = ref('24h');
 const store = useStore();
@@ -118,20 +119,6 @@ watch(selectedChange,(newValue)=> {
 onUnmounted(()=> {
   // disconnectWebSocket()
 })
-function formatPrice(price){
-  return Number(price).toLocaleString('en',{maximumSignificantDigits:20})
-}
-function formatVolume(volume){
-  return Intl.NumberFormat('en', {notation: "compact",maximumFractionDigits: 2}).format(volume) //output - "234K"
-}
-
-function formatPercent(percent){
-  if(percent == 0){
-    return 0
-  }else{
-    return (Number(percent).toFixed(2))
-  }
-}
 
 function handleScroll() {
   const scrollTop = scrollcheck.value.scrollTop;

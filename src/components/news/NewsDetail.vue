@@ -30,7 +30,7 @@
 import {computed, ref} from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import {displayDate} from '@/utils/convertTime'
+import {displayDate} from '@/utils/formatter/convertTime'
 import NewsMenu from '@/components/news/NewsMenu.vue'
 const route = useRoute();
 const postId = ref(route.params.id);

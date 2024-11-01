@@ -40,7 +40,7 @@
 <script setup>
 import {computed} from 'vue';
 import { useStore } from 'vuex';
-import {displayDate} from '@/utils/convertTime'
+import {displayDate} from '@/utils/formatter/convertTime'
 const store = useStore();
 const majorNewsList = computed(()=> {
         return store.state.newsList.majorNewsMain

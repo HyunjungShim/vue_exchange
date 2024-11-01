@@ -22,7 +22,7 @@
 import { useStore } from 'vuex';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter,useRoute } from 'vue-router';
-import {dateDiff,displayDate} from '@/utils/convertTime'
+import {dateDiff,displayDate} from '@/utils/formatter/convertTime'
 import NewsMenu from '@/components/news/NewsMenu.vue'
 const store = useStore();
 const router = useRouter();
