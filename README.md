@@ -23,4 +23,4 @@
 >    Binance 거래소 API,Socket 사용하여 코인들 실시간 시세,차트 부분 정보 활용했습니다.
 >    Socket 및 Chart library(lightweight charts,tradingview widget) 사용하여 실시간 데이터 반영했습니다.
 >    코인관련 뉴스 API 사용하여 주요,최신뉴스 및 메이저 코인들에 관한 뉴스 기사 확인 가능 하며,
->    @vueuse/core 사용하여 사이트 컬러테마 감지 , Dark/Light Mode 사용
+>    @vueuse/core 사용하여 사이트 컬러테마 감지하여 Dark/Light Mode를 변경할 수 있습니다.
